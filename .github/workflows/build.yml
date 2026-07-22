@@ -21,6 +21,10 @@ jobs:
           /p:Platform=x64
           /p:PlatformToolset=v143
           /m
+      - name: Ensure WebView2Loader.dll is in output (safety net)
+        run: copy "MegaSelfCode1.21.4\packages\Microsoft.Web.WebView2.1.0.3719.77\build\native\x64\WebView2Loader.dll" "MegaSelfCode1.21.4\x64\Release\WebView2Loader.dll"
+        shell: cmd
+        continue-on-error: true
       - name: Upload exe
         uses: actions/upload-artifact@v4
         with:
