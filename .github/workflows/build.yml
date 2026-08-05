@@ -21,17 +21,26 @@ jobs:
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2
 
+    - name: Find Solution File
+      id: find_sln
+      shell: powershell
+      run: |
+        $sln = (Get-ChildItem -Recurse -Include *.sln, *.slnx | Select-Object -First 1).FullName
+        if (-not $sln) { Write-Error "Solution file not found"; exit 1 }
+        echo "SLN_PATH=$sln" >> $env:GITHUB_ENV
+        Write-Host "Found solution at: $sln"
+
     - name: Restore NuGet Packages
-      run: nuget restore DuneVisualsLoader/DuneVisuals1.21.4/DuneVisualsLoader.slnx
+      run: nuget restore "$env:SLN_PATH"
 
     - name: Build Project
       run: |
-        msbuild DuneVisualsLoader/DuneVisuals1.21.4/DuneVisualsLoader.slnx /p:Configuration=Release /p:Platform=x64
+        msbuild "$env:SLN_PATH" /p:Configuration=Release /p:Platform=x64
 
     - name: Upload Executable Artifact
       uses: actions/upload-artifact@v4
       with:
         name: DuneVisualsLoader-Build
         path: |
-          DuneVisualsLoader/DuneVisuals1.21.4/**/Release/*.exe
-          DuneVisualsLoader/DuneVisuals1.21.4/**/x64/Release/*.exe
+          **/Release/*.exe
+          **/x64/Release/*.exe
