@@ -15,11 +15,13 @@
 #include <iomanip>
 #include <atomic>
 #include <cwctype>
+#include <cctype>
 #include <wrl.h>
 #include <wil/com.h>
 #include "WebView2.h"
 #include <map>
 #include <set>
+#include <nlohmann/json.hpp>
 #pragma comment(lib, "wininet.lib")
 #pragma comment(lib, "dwmapi.lib")
 #pragma comment(lib, "shlwapi.lib")
@@ -36,13 +38,15 @@ namespace fs = std::filesystem;
 std::wstring CHEAT_NAME = L"Dune Visuals";
 
 // ==== ВЕРСИЯ МОДА ====
-// При каждом новом релизе dune-.00X.jar на GitHub — просто бампни это число.
-// Лаунчер сам сравнит его с тем, что сохранено у юзера в реестре, и если версия
-// новее — перекачает ТОЛЬКО мод (без переустановки Minecraft/JRE/assets) и запустит игру.
-const std::wstring MOD_VERSION = L"002";
+// Лаунчер сам спрашивает у GitHub, какой файл dune-.NNN.jar самый новый в релизе "visuals",
+// и качает именно его. Тебе больше не нужно ничего трогать в коде — просто залей новый
+// dune-.00X.jar в тот же релиз, и все лаунчеры подхватят его при следующем запуске.
+// Это значение — просто запасной вариант на случай, если GitHub недоступен.
+std::wstring MOD_VERSION = L"003";
 
 const std::wstring JRE_URL = L"https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.10%2B7/OpenJDK21U-jre_x64_windows_hotspot_21.0.10_7.zip"; // Это JRE если надо замени
-const std::wstring MOD_URL = L"https://github.com/maksmnha67-cmd/dune-visuals/releases/download/visuals/dune-." + MOD_VERSION + L".jar"; // Это твой главный мод клиента. Fabric 1.21.4
+const std::wstring MOD_RELEASE_API_URL = L"https://api.github.com/repos/maksmnha67-cmd/dune-visuals/releases/tags/visuals";
+std::wstring GetModUrl() { return L"https://github.com/maksmnha67-cmd/dune-visuals/releases/download/visuals/dune-." + MOD_VERSION + L".jar"; }
 const std::wstring MOD_FILENAME = L"dune.jar"; // имя файла на диске всегда одно и то же, чтобы апдейт просто перезаписывал его
 const std::wstring ADD_MOD_URL = L"https://www.dropbox.com/scl/fi/jmb2gzykcd467bj8ncknw/fabric-api-0.119.4-1.21.4.jar?rlkey=4bx8x9v9uq95i0nv7w3pmeiiw&st=05orip2n&dl=1"; // Это Fabric API
 const std::wstring GAME_URL = L"https://github.com/maksmnha67-cmd/dune-visuals/releases/download/visuals/game.zip"; // versions/Fabric 1.21.4 + libraries
@@ -229,6 +233,47 @@ void CleanupOldModJars(const std::wstring& modsDir) {
             fs::remove(entry.path(), ec);
         }
     }
+}
+
+std::string FetchUrlToString(const std::wstring& url) {
+    HINTERNET hI = InternetOpenW(L"Launcher/1.0", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+    if (!hI) return "";
+    DWORD timeout = 5000;
+    InternetSetOptionW(hI, INTERNET_OPTION_CONNECT_TIMEOUT, &timeout, sizeof(timeout));
+    InternetSetOptionW(hI, INTERNET_OPTION_RECEIVE_TIMEOUT, &timeout, sizeof(timeout));
+    InternetSetOptionW(hI, INTERNET_OPTION_SEND_TIMEOUT, &timeout, sizeof(timeout));
+    HINTERNET hU = InternetOpenUrlW(hI, url.c_str(), NULL, 0, INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE, 0);
+    if (!hU) { InternetCloseHandle(hI); return ""; }
+    std::string result; char buf[8192]; DWORD br;
+    while (InternetReadFile(hU, buf, sizeof(buf), &br) && br > 0) result.append(buf, br);
+    InternetCloseHandle(hU); InternetCloseHandle(hI);
+    return result;
+}
+
+// Спрашивает у GitHub какие ассеты есть в релизе "visuals" и находит файл dune-.NNN.jar
+// с самым большим номером. Если сеть/API недоступны — тихо оставляет запасную версию MOD_VERSION.
+void RefreshLatestModVersion() {
+    std::string body = FetchUrlToString(MOD_RELEASE_API_URL);
+    if (body.empty()) return;
+    try {
+        auto j = nlohmann::json::parse(body);
+        if (!j.contains("assets") || !j["assets"].is_array()) return;
+        int best = -1; std::string bestStr;
+        for (auto& a : j["assets"]) {
+            std::string name = a.value("name", std::string());
+            size_t p1 = name.find("dune-.");
+            if (p1 == std::string::npos) continue;
+            size_t start = p1 + 6;
+            size_t p2 = name.find(".jar", start);
+            if (p2 == std::string::npos || p2 <= start) continue;
+            std::string numPart = name.substr(start, p2 - start);
+            if (numPart.empty() || !std::all_of(numPart.begin(), numPart.end(), [](unsigned char c) { return std::isdigit(c); })) continue;
+            int val = std::stoi(numPart);
+            if (val > best) { best = val; bestStr = numPart; }
+        }
+        if (best >= 0) MOD_VERSION = std::wstring(bestStr.begin(), bestStr.end());
+    }
+    catch (...) { /* оставляем запасную версию как есть */ }
 }
 
 bool DownloadFile(const std::wstring& url, const std::wstring& destPath, const std::wstring& statusText) {
@@ -566,7 +611,7 @@ void InstallAndLaunchThread() {
         ok = UnzipWithPowerShell(base + L"jre.zip", base + L"jre"); fs::remove(base + L"jre.zip");
     }
     CleanupOldModJars(modd);
-    if (ok) ok = DownloadFile(MOD_URL, modd + MOD_FILENAME, g_LangRu ? L"\u0421\u043A\u0430\u0447\u0438\u0432\u0430\u043D\u0438\u0435 \u043C\u043E\u0434\u0430..." : L"Downloading mod...");
+    if (ok) ok = DownloadFile(GetModUrl(), modd + MOD_FILENAME, g_LangRu ? L"\u0421\u043A\u0430\u0447\u0438\u0432\u0430\u043D\u0438\u0435 \u043C\u043E\u0434\u0430..." : L"Downloading mod...");
     if (ok) ok = DownloadFile(ADD_MOD_URL, modd + L"fabric-api-0.119.4-1.21.4.jar", g_LangRu ? L"\u0421\u043A\u0430\u0447\u0438\u0432\u0430\u043D\u0438\u0435 Fabric API..." : L"Downloading Fabric API...");
     if (ok) ok = DownloadFile(GAME_URL, base + L"game.zip", g_LangRu ? L"\u0421\u043A\u0430\u0447\u0438\u0432\u0430\u043D\u0438\u0435 Minecraft..." : L"Downloading Minecraft...");
     if (ok) {
@@ -604,7 +649,7 @@ void UpdateModThread() {
     std::wstring modd = GetModsDir();
     fs::create_directories(modd);
     CleanupOldModJars(modd);
-    bool ok = DownloadFile(MOD_URL, modd + MOD_FILENAME, g_LangRu ? L"\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435 \u043C\u043E\u0434\u0430..." : L"Updating mod...");
+    bool ok = DownloadFile(GetModUrl(), modd + MOD_FILENAME, g_LangRu ? L"\u041E\u0431\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435 \u043C\u043E\u0434\u0430..." : L"Updating mod...");
     if (g_CancelDownload) return;
     if (ok) {
         RegState st = LoadRegistry();
@@ -650,6 +695,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR, int) {
     RegState saved = LoadRegistry();
     g_DarkTheme = saved.darkTheme; g_LangRu = saved.langRu; g_RamAmount = saved.ram;
     g_HasSavedPrefs = saved.hasPrefs; g_Nickname = saved.nickname;
+    std::thread(RefreshLatestModVersion).detach(); // тихо спрашивает у GitHub актуальную версию мода, пока показывается окно
 
     std::wstring themeColor = L"#FFFFFF";
     std::wstring themeColorRgb = L"255, 255, 255";
