@@ -247,7 +247,13 @@ bool DownloadFile(const std::wstring& url, const std::wstring& destPath, const s
         double cm = tr / 1024.0 / 1024.0, pc = (ts > 0) ? (double)tr / ts * 100.0 : 0.0;
         SendProgress(pc, cm, tm, statusText);
     }
-    of.close(); InternetCloseHandle(hU); InternetCloseHandle(hI); return true;
+    of.close(); InternetCloseHandle(hU); InternetCloseHandle(hI);
+    if (ts > 0 && tr != ts) {
+        SendError(L"Download incomplete: " + std::to_wstring(tr) + L"/" + std::to_wstring(ts) + L" bytes");
+        fs::remove(destPath);
+        return false;
+    }
+    return true;
 }
 
 bool UnzipWithPowerShell(const std::wstring& zipPath, const std::wstring& targetDir) {
@@ -616,7 +622,7 @@ void StartProcessLogic() {
     if (g_GamePID != 0) { TerminateGame(); return; }
     RegState st = LoadRegistry();
     bool fe = fs::exists(GetVersionDir() + L"Fabric 1.21.4.jar") && (fs::exists(GetBaseDir() + L"jre"));
-    bool modUpToDate = (st.modVersion == MOD_VERSION);
+    bool modUpToDate = (st.modVersion == MOD_VERSION) && fs::exists(GetModsDir() + MOD_FILENAME);
     if (st.isInstalled && fe && modUpToDate) {
         SafePostJson(L"{ \"type\": \"launch_success\" }"); LaunchGame();
     }
