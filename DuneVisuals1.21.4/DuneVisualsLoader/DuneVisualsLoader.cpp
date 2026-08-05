@@ -768,9 +768,10 @@ body.dark .slider{background:#212121;border:1.4px solid var(--border);}body.ligh
 .slider::-webkit-slider-thumb{-webkit-appearance:none;width:36px;height:20px;background:var(--green);border-radius:10px;cursor:grab;box-shadow:0 0 10px rgba(var(--theme-rgb),.4);transition:transform .1s;}
 body.dark .slider::-webkit-slider-thumb{border:2px solid var(--bg);}body.light .slider::-webkit-slider-thumb{border:2px solid #fff;}
 .slider::-webkit-slider-thumb:hover{transform:scale(1.1);}
-.btn-extra-settings{position:absolute;top:240px;left:30px;width:322px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-family:'Montserrat',sans-serif;font-weight:600;cursor:pointer;transition:.2s;user-select:none;}
+.btn-extra-settings{position:absolute;top:296px;left:30px;width:322px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-family:'Montserrat',sans-serif;font-weight:600;cursor:pointer;transition:.2s;user-select:none;}
 body.dark .btn-extra-settings{background:#1a1a1a;border:1.4px solid var(--border);color:var(--green);}
 body.light .btn-extra-settings{background:#f0f0f0;border:1.4px solid var(--border-light);color:var(--green);}
+.btn-mods-pos{top:240px;}
 .btn-extra-settings:hover{border-color:var(--green);}
 .btn-extra-settings:active{transform:scale(.97);}
 .btn-extra-settings svg{width:16px;height:16px;transition:transform .3s;}
@@ -910,7 +911,7 @@ body.dark .extra-divider{background:var(--border);}body.light .extra-divider{bac
                 <div class="ram-header font-semibold text-green"><span id="ramLabel">RAM</span><span id="ramValue">4028MB</span></div>
                 <input type="range" min="1024" max="16384" value="4028" step="128" class="slider" id="ramSlider">
             </div>
-            <div class="btn-extra-settings" id="btnModsFolder" onclick="openModsFolder()">
+            <div class="btn-extra-settings btn-mods-pos" id="btnModsFolder" onclick="openModsFolder()">
                 <span id="modsLabel">Mods</span>
             </div>
             <div class="btn-extra-settings" id="btnExtraSettings" onclick="toggleExtraPanel()">
