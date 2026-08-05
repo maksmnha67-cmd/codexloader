@@ -680,7 +680,7 @@ body.light .win-btn{background:#F0F0F0;border:1.4px solid var(--border-light);co
 .win-btn:hover{opacity:.85;}
 .win-close:hover{background:var(--btn-red);border-color:var(--btn-red);color:#fff;}
 .header-title{position:absolute;top:70px;left:30px;display:flex;align-items:center;gap:16px;font-size:26px;line-height:32px;}
-.logo-icon{width:32px;height:32px;object-fit:contain;filter:drop-shadow(0 0 5px rgba(var(--theme-rgb),.3));}
+.logo-icon{width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 0 5px rgba(var(--theme-rgb),.3));}
 .version-row{position:absolute;top:123px;left:30px;font-size:22px;white-space:nowrap;}
 )CSS";
 
