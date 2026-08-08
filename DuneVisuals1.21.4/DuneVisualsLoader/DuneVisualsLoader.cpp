@@ -893,7 +893,7 @@ body.dark .extra-divider{background:var(--border);}body.light .extra-divider{bac
             <div class="version-row font-unbounded text-green">Minecraft 1.21.4</div>
             <div class="image-frame"></div>
             <div class="description font-medium text-main" id="mainDesc">desc</div>
-            <div class="btn-small btn-site font-semibold text-green" id="btnSiteText" onclick="window.open('https://dunevisuals.netlify.app')">Site</div>
+            <div class="btn-small btn-site font-semibold text-green" id="btnSiteText" onclick="window.open('https://dunevisualss.web.app')">Site</div>
             <div class="btn-small btn-settings font-semibold text-green" id="btnSettingsText" onclick="goToSettings()">Settings</div>
             <button id="mainLaunchBtn" class="btn-launch font-semibold" onclick="handleMainButton()">Launch</button>
         </div>
