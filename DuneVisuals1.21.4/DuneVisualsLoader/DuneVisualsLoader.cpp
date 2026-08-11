@@ -728,7 +728,6 @@ body.dark .sidebar-divider{background:var(--border);}body.light .sidebar-divider
 body.dark .icon-btn{background:#1c1c20;border:1.4px solid var(--border);color:rgba(255,255,255,.5);}
 body.light .icon-btn{background:#F0F0F0;border:1.4px solid var(--border-light);color:rgba(0,0,0,.5);}
 .icon-btn:hover{color:var(--green);border-color:var(--green);}
-.top-icons-row{position:absolute;top:16px;right:88px;display:flex;gap:8px;z-index:60;}
 .status-pill{position:absolute;top:12px;right:12px;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;backdrop-filter:blur(6px);background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.15);color:#fff;}
 .btn-play-circle{position:absolute;bottom:12px;right:12px;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s cubic-bezier(.25,.8,.25,1);border:none;background:var(--green);}
 body.dark .btn-play-circle{color:var(--bg);}body.light .btn-play-circle{color:#fff;}
@@ -758,12 +757,11 @@ body.light .win-btn{background:#F0F0F0;border:1.4px solid var(--border-light);co
 .win-close:hover{background:var(--btn-red);border-color:var(--btn-red);color:#fff;}
 .header-title{position:absolute;top:56px;left:30px;display:flex;align-items:center;gap:16px;font-size:26px;line-height:32px;}
 .logo-icon{width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 0 5px rgba(var(--theme-rgb),.3));}
-.version-row{position:absolute;top:123px;left:30px;font-size:22px;white-space:nowrap;}
 )CSS";
 
     std::wstring css2 = LR"CSS(
-.image-frame{position:absolute;top:200px;left:30px;width:322px;height:190px;border-radius:16px;background-color:#333;background-image:url('https://raw.githubusercontent.com/maksmnha67-cmd/duneloader/main/1647606525_50-amiel-club-p-kartinki-mainkraft-postroiki-53.png');background-size:cover;background-position:center;overflow:visible;}
-.description{position:absolute;top:410px;left:30px;width:322px;font-size:14px;line-height:18px;}
+.image-frame{position:absolute;top:140px;left:30px;width:322px;height:220px;border-radius:16px;background-color:#333;background-image:url('https://raw.githubusercontent.com/maksmnha67-cmd/duneloader/main/1647606525_50-amiel-club-p-kartinki-mainkraft-postroiki-53.png');background-size:cover;background-position:center;overflow:visible;}
+.description{position:absolute;top:382px;left:30px;width:322px;font-size:14px;line-height:18px;}
 .btn-small{position:absolute;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;transition:.2s;user-select:none;}
 body.dark .btn-small{background:#1c1c20;border:1.4px solid var(--border);}body.light .btn-small{background:#F0F0F0;border:1.4px solid var(--border-light);}
 .btn-small:hover{border-color:var(--green);}.btn-small:active{transform:scale(.96);}
@@ -893,9 +891,6 @@ body.dark .extra-divider{background:var(--border);}body.light .extra-divider{bac
         </div>
         <div class="content-area">
         <div class="title-drag-area" onmousedown="window.chrome.webview.postMessage('drag_window')"></div>
-        <div class="top-icons-row">
-            <div class="icon-btn" id="btnSiteIcon" onclick="window.open('https://dunevisualss.web.app')">)HTML" + svgGlobe + LR"HTML(</div>
-        </div>
         <div class="window-controls">
             <div class="win-btn win-min" onclick="window.chrome.webview.postMessage('minimize')">&#8722;</div>
             <div class="win-btn win-close" onclick="window.chrome.webview.postMessage('close')">&times;</div>
@@ -928,8 +923,8 @@ body.dark .extra-divider{background:var(--border);}body.light .extra-divider{bac
             <div class="header-title font-unbounded text-green">
                 <img class="logo-icon" src=")HTML" + logoDataUri + LR"HTML(" alt="logo">
                 <span id="cheatNameTitle">EXAMPLE</span>
+                <div class="icon-btn" id="btnSiteIcon" onclick="window.open('https://dunevisualss.web.app')">)HTML" + svgGlobe + LR"HTML(</div>
             </div>
-            <div class="version-row font-unbounded text-green">Minecraft 1.21.4</div>
             <div class="image-frame">
                 <div class="status-pill" id="cardStatusPill">FABRIC 1.21.4</div>
                 <button class="btn-play-circle" id="cardPlayBtn" onclick="handleMainButton()">)HTML" + svgPlay + LR"HTML(</button>
