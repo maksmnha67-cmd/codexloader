@@ -728,7 +728,7 @@ body.dark .sidebar-divider{background:var(--border);}body.light .sidebar-divider
 body.dark .icon-btn{background:#1c1c20;border:1.4px solid var(--border);color:rgba(255,255,255,.5);}
 body.light .icon-btn{background:#F0F0F0;border:1.4px solid var(--border-light);color:rgba(0,0,0,.5);}
 .icon-btn:hover{color:var(--green);border-color:var(--green);}
-.top-icons-row{position:absolute;top:16px;right:52px;display:flex;gap:8px;z-index:60;}
+.top-icons-row{position:absolute;top:16px;right:88px;display:flex;gap:8px;z-index:60;}
 .status-pill{position:absolute;top:12px;right:12px;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;backdrop-filter:blur(6px);background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.15);color:#fff;}
 .btn-play-circle{position:absolute;bottom:12px;right:12px;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s cubic-bezier(.25,.8,.25,1);border:none;background:var(--green);}
 body.dark .btn-play-circle{color:var(--bg);}body.light .btn-play-circle{color:#fff;}
@@ -762,8 +762,8 @@ body.light .win-btn{background:#F0F0F0;border:1.4px solid var(--border-light);co
 )CSS";
 
     std::wstring css2 = LR"CSS(
-.image-frame{position:absolute;top:156px;left:30px;width:322px;height:140px;border-radius:16px;background-color:#333;background-image:url('https://raw.githubusercontent.com/maksmnha67-cmd/duneloader/main/1647606525_50-amiel-club-p-kartinki-mainkraft-postroiki-53.png');background-size:cover;background-position:center;overflow:visible;}
-.description{position:absolute;top:335px;left:30px;width:322px;font-size:14px;line-height:18px;}
+.image-frame{position:absolute;top:200px;left:30px;width:322px;height:190px;border-radius:16px;background-color:#333;background-image:url('https://raw.githubusercontent.com/maksmnha67-cmd/duneloader/main/1647606525_50-amiel-club-p-kartinki-mainkraft-postroiki-53.png');background-size:cover;background-position:center;overflow:visible;}
+.description{position:absolute;top:410px;left:30px;width:322px;font-size:14px;line-height:18px;}
 .btn-small{position:absolute;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;transition:.2s;user-select:none;}
 body.dark .btn-small{background:#1c1c20;border:1.4px solid var(--border);}body.light .btn-small{background:#F0F0F0;border:1.4px solid var(--border-light);}
 .btn-small:hover{border-color:var(--green);}.btn-small:active{transform:scale(.96);}
@@ -881,6 +881,7 @@ body.dark .extra-divider{background:var(--border);}body.light .extra-divider{bac
     std::wstring svgGear = LR"(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>)";
     std::wstring svgGlobe = LR"(<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20z"/></svg>)";
     std::wstring svgPlay = LR"(<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>)";
+    std::wstring svgStop = LR"(<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>)";
 
     std::wstring htmlBody = LR"HTML(
 <div class="outer-container">
@@ -934,7 +935,6 @@ body.dark .extra-divider{background:var(--border);}body.light .extra-divider{bac
                 <button class="btn-play-circle" id="cardPlayBtn" onclick="handleMainButton()">)HTML" + svgPlay + LR"HTML(</button>
             </div>
             <div class="description font-medium text-main" id="mainDesc">desc</div>
-            <button id="mainLaunchBtn" class="btn-launch font-semibold" onclick="handleMainButton()">Launch</button>
         </div>
 
         <div id="settings-screen" class="screen inactive-right">
@@ -1000,6 +1000,8 @@ body.dark .extra-divider{background:var(--border);}body.light .extra-divider{bac
 )HTML";
 
     std::wstring js1 = LR"JS(
+const SVG_PLAY=`)JS" + svgPlay + LR"JS(`,SVG_STOP=`)JS" + svgStop + LR"JS(`;
+
 <script>
 const mainScreen=document.getElementById('main-screen'),settingsScreen=document.getElementById('settings-screen'),loadingScreen=document.getElementById('loading-screen'),welcomeScreen=document.getElementById('welcome-screen'),extraPanel=document.getElementById('extraPanel');
 let isGameRunning=false,currentLang='ru',currentTheme='dark',currentNickname='Player',extraPanelOpen=false;
@@ -1019,9 +1021,7 @@ document.getElementById('btnNickSave').innerText=t('save');
 document.getElementById('extraSettLabel').innerText=t('extraSettings');
 document.getElementById('modsLabel').innerText=t('mods');
 document.getElementById('extraThemeLabel').innerText=t('theme');
-document.getElementById('extraLangLabel').innerText=t('language');
-const btn=document.getElementById('mainLaunchBtn');
-if(!isGameRunning)btn.innerText=t('launch');else btn.innerText=t('terminate');}
+document.getElementById('extraLangLabel').innerText=t('language');}
 function applyTheme(th){currentTheme=th;document.body.classList.remove('dark','light');document.body.classList.add(th);
 document.getElementById('settBtnDark').classList.toggle('active',th==='dark');
 document.getElementById('settBtnLight').classList.toggle('active',th==='light');refreshSlider();}
@@ -1063,7 +1063,7 @@ slider.addEventListener('input',function(){output.innerHTML=this.value+"MB";upda
 function handleMainButton(){window.chrome.webview.postMessage("action_button");}
 function openModsFolder(){window.chrome.webview.postMessage("open_mods");}
 function cancelInstall(){window.chrome.webview.postMessage("cancel_install");loadingScreen.classList.remove('active');loadingScreen.classList.add('inactive-right');mainScreen.classList.remove('inactive-left');mainScreen.classList.add('active');}
-function setRunningState(r){isGameRunning=r;const btn=document.getElementById('mainLaunchBtn');if(r){btn.innerText=t('terminate');btn.classList.add('btn-quit-mode');}else{btn.innerText=t('launch');btn.classList.remove('btn-quit-mode');}}
+function setRunningState(r){isGameRunning=r;const btn=document.getElementById('cardPlayBtn');if(r){btn.innerHTML=SVG_STOP;btn.classList.add('btn-quit-mode');}else{btn.innerHTML=SVG_PLAY;btn.classList.remove('btn-quit-mode');}}
 )JS";
 
     std::wstring js2 = LR"JS(
