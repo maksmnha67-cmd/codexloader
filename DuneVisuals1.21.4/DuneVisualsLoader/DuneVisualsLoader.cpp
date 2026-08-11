@@ -720,8 +720,8 @@ body.dark .sidebar-icon{color:rgba(255,255,255,.32);}body.light .sidebar-icon{co
 .sidebar-icon:hover{color:var(--green);}
 .sidebar-icon.active{background:var(--green);}
 body.dark .sidebar-icon.active{color:var(--bg);}body.light .sidebar-icon.active{color:#fff;}
-.sidebar-divider{width:24px;height:1px;flex-shrink:0;margin:2px 0;}
-body.dark .sidebar-divider{background:var(--border);}body.light .sidebar-divider{background:var(--border-light);}
+.sidebar-divider{width:28px;height:1px;flex-shrink:0;margin:4px 0;}
+body.dark .sidebar-divider{background:rgba(255,255,255,.16);}body.light .sidebar-divider{background:rgba(0,0,0,.16);}
 .wrapper.pre-welcome .sidebar{opacity:0;pointer-events:none;}
 .icon-btn{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;}
 .icon-btn svg{width:14px;height:14px;}
